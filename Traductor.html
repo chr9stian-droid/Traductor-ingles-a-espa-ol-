@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Traductor Español a Inglés</title>
+</head>
+<body style="font-family:Arial;background:#f2f2f2;text-align:center;padding:20px;margin:0;">
+
+<h1 style="color:#004AAD;">TRADUCTOR</h1>
+<p>Español a Inglés</p>
+
+<input type="text" id="busqueda" placeholder="Escribe en español..." 
+style="padding:15px;width:90%;max-width:400px;font-size:18px;border:2px solid #004AAD;border-radius:10px;outline:none;">
+
+<div id="resultado" style="margin-top:25px;background:white;padding:20px;border-radius:10px;max-width:400px;margin-left:auto;margin-right:auto;font-size:22px;min-height:30px;font-weight:bold;color:#004AAD;box-shadow:0 2px 10px rgba(0,0,0,0.1);">
+</div>
+
+<script>
+const input = document.getElementById('busqueda');
+const res = document.getElementById('resultado');
+
+input.addEventListener('input', async () => {
+  let texto = input.value.trim();
+  if (!texto) { res.innerHTML = ""; return; }
+  res.innerHTML = "Traduciendo...";
+  try {
+    // CAMBIO IMPORTANTE: es|en
+    let url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(texto)}&langpair=es|en`;
+    let r = await fetch(url);
+    let data = await r.json();
+    res.innerHTML = data.responseData.translatedText.toUpperCase();
+  } catch (e) {
+    res.innerHTML = "Error de conexión";
+  }
+});
+</script>
+</body>
+</html>
